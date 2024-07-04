@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<!-- saved from url=(0043)https://sama.gums.ac.ir/Education/Workbooks -->
+<html lang="fa" class="geolocation history postmessage svg websockets localstorage sessionstorage no-websqldatabase webworkers hashchange audio canvas canvastext video webgl cssgradients hsla multiplebgs opacity rgba mediaqueries no-touchevents fontface generatedcontent es5date es5function supports es5object es5array strictmode es5string json svgclippaths smil es5undefined es5syntax es5 textshadow no-forcetouch cssanimations backgroundsize borderimage flexbox borderradius boxshadow csscolumns csscolumns-width csscolumns-span csscolumns-fill csscolumns-gap csscolumns-rule csscolumns-rulecolor csscolumns-rulestyle csscolumns-rulewidth csscolumns-breakbefore csscolumns-breakafter csscolumns-breakinside flexboxlegacy cssreflections csstransforms csstransforms3d csstransitions indexeddb k-webkit k-webkit125 indexeddb-deletedatabase" style=""><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Metro, a sleek, intuitive, and powerful framework for faster and easier web development for Windows Metro Style.">
+    <meta name="keywords" content="آموزش, سامانه آموزش, پرتال سما, سامانه یکپارچه هم آوا,Sama ,Education System">
+    <meta name="author" content="سما سامانه, samasoft.net">
+    <link href="https://sama.gums.ac.ir/CAS/CDN/images/favicon.ico" rel="shortcut icon">
+    <title>کارنامه</title>
+    <link href="./کارنامه_files/cas-all-0.0.5.css" rel="stylesheet">
+        <link href="./کارنامه_files/cas-all-rtl-0.0.1.css" rel="stylesheet">
+
+    
+    <script src="./کارنامه_files/education-header-all-0.0.9-part1.js.download"></script><style type="text/css" id="operaUserStyle"></style><style type="text/css"></style>
+    <script src="./کارنامه_files/education-header-all-0.0.9-part2.js.download"></script>
+    <script src="./کارنامه_files/kendo.upload.min.js.download"></script>
+    <script src="./کارنامه_files/kendo.numerictextbox.min.js.download"></script>
+
+    
+    <style>
+        .form-control.readonly, input:read-only, input:-moz-read-only {
+            background-color: #eee;
+            opacity: 1;
+            -webkit-user-select: text !important;
+            -moz-user-select: text !important;
+            -ms-user-select: text !important;
+            -o-user-select: text !important;
+            user-select: text !important;
+        }
+
+        .modal .modal-dialog .modal-body > .litegrid-parent {
+            overflow: auto;
+        }
+    </style>
+
+    <script type="text/javascript">
+		
+		var _LatinNumbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+		var _PersianNumbers = ['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'];
+		function ToLatinNumbers(input) {
+			var res = '';
+			for (var i = 0; i < input.length; i++) {
+				res += _LatinNumbers[_PersianNumbers.indexOf(input[i])] || input[i];
+			}
+			return res;
+		}
+
+		function loadMenuBar() {
+			// Load menu from CAS
+            $.get('/CAS/Home/Menu').success(function(res) {
+                //$(".container-fluid").prepend(res);
+                $("#menu-container").replaceWith(res);
+            });
+        }
+		$(function () {
+			loadMenuBar();
+		});
+
+		
+		setCulture('fa-IR');
+		$(document).ajaxError(function (e, jqxhr, exception) {
+			if (jqxhr.responseText && jqxhr.responseText.indexOf('نشست') != -1) {
+				window.location = '/CAS/Account/Login' + '?ReturnUrl=' + encodeURI(window.location);
+			}
+		});
+
+		$(function () {
+
+			$('[data-toggle="tooltip"]').tooltip();
+			$(document).off("keypress", '.number');
+			$(document).on("keypress", '.number', function (e) {
+				var key = (!e.keyCode) ? (!e.which ? e.charCode : e.which) : (e.keyCode);
+				if (key > 31 && key != 46 && key != 37 && (key < 48 || key > 57) && key != 38 && key != 40) {
+					e.preventDefault();
+					return false;
+				}
+			});
+
+			$("ul.ui-tabs-nav").html();
+			$("ul.ui-tabs-nav").removeClass("ui-widget-header");
+			$('#sliderButton').click(function () {
+				$("#menu-right-box").toggleClass('visible', 'slow');
+			});
+
+			$.get('/Education/General/GetLastError', function (result) {
+				if (result) $.alert(result);
+				console.log(result);
+			});
+
+			$.ajaxSetup({
+				error: function (jqXHR) { if (jqXHR.responseText) $.alert(jqXHR.responseText); },
+				timeout: 60000,
+				datatype: 'json',
+				cache: false,
+			});
+
+
+			window.showMessage = function (message, timeout) {
+				new Noty({ text: message, type: 'info', timeout: timeout, layout: "topCenter", theme: 'metroui', closeWith: ['click', 'button'] }).show();
+			};
+
+			var timeOut = Number(360) * 60;
+
+			window.resetTimer = function () {
+				window.timer = timeOut;
+
+				// comment because The "Same Origin" security policy
+				//if (window.opener && window.opener.timer) {
+				//	if(window.resetTimer !== window.opener.resetTimer)
+				//	    window.opener.resetTimer();
+				//}
+			}
+			window.resetTimer();
+
+			$(document).ajaxComplete(function (e, jqxhr, settings) {
+				resetTimer();
+			});
+
+			$(document).ajaxSend(function (e, jqxhr, settings) {
+				if (timer == 0) {
+					$.alert('شما مدتی در سیستم غیر فعال بوده اید، لطفأ دوباره وارد شوید');
+					window.location = '/CAS/Account/Login' + '?ReturnUrl=' + escape(window.location);
+				}
+			});
+			String.prototype.toHHMMSS = function () {
+				var sec_num = parseInt(this, 10); // don't forget the second param
+				var hours = Math.floor(sec_num / 3600);
+				var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+				var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+				if (hours < 10) { hours = "0" + hours; }
+				if (minutes < 10) { minutes = "0" + minutes; }
+				if (seconds < 10) { seconds = "0" + seconds; }
+				return hours + ':' + minutes + ':' + seconds;
+			}
+
+			var timerHandle = setInterval(function () {
+				if (timer < timeOut / 4) {
+					$('.timerText').animate({ backgroundColor: '#ff99bb' }, 'slow');
+				}
+				else if (timer < timeOut / 2) {
+					$('.timerText').animate({ backgroundColor: '#fdffaa' }, 'slow');
+				}
+				else {
+					$('.timerText').animate({ backgroundColor: '#99ffcc' }, 'slow');
+				}
+				//alert(Math.floor(timer / 60));
+				//alert(timer % 60);
+				//				$('.timerText').val(String.advanceFormat('{0:##}:{1:00}', Math.floor(timer / 60), timer % 60));
+
+				$('.timerText').val((Math.floor(timer / 60) * 60 + timer % 60).toString().toHHMMSS());
+				if (timer == 0) {
+					clearInterval(timerHandle);
+					$.alert('شما مدتی در سیستم غیر فعال بوده اید، لطفأ دوباره وارد شوید');
+				}
+				else {
+					timer--;
+				}
+			}, 1000);
+
+			//digit grouping for display 1000000 as: 1,000,000
+			$(".group-digit").each(GroupDigit);
+			function GroupDigit() {
+				function commafy(num) {
+					var str = num.toString().split('.');
+					if (str[0].length >= 4) {
+						str[0] = str[0].replace(/(\d)(?=(\d{3})+$)/g, '$1,');
+					}
+					if (str[1] && str[1].length >= 4) {
+						str[1] = str[1].replace(/(\d{3})/g, '$1,');
+					}
+					return str.join('.');
+				}
+				$(this).html(commafy($(this).html()));
+			}
+
+			//اخرین گریدی که روی آن کلیک شده است
+			$('.k-grid').click(function () {
+				lastId = $(this).attr("id");
+				GridCellClick(lastId);
+			});
+		});
+
+		function focusColor(element) {
+			$(element).focus();
+		}
+
+		function clearFirst() {
+			$('form input').each(function () {
+				switch (this.type) {
+					case 'text':
+						$(this).val('');
+						break;
+				}
+			});
+		}
+    </script>
+    
+    <script type="text/javascript">
+
+        $(function () {
+            $('#myTab a:first').tab('show');
+        });
+
+        
+    </script>
+
+</head>
+<body>
+    
+<style>
+    span.tel {
+        float: left;
+        direction: ltr;
+        text-align: left;
+    }
+
+    .numberCircle {
+        border-radius: 50%;
+        behavior: url(PIE.htc);
+        width: 16px;
+        height: 16px;
+        padding: 3px;
+        background: #e45252;
+        border: 2px solid #666;
+        color: #fff;
+        text-align: center;
+        font-size: 12px;
+    }
+</style>
+
+<script>
+    var ticketQueryString = "";
+</script>
+<header class="app-bar navy" data-role="appbar">
+    <span class="app-bar-pull">
+        <a href="javascript:MenuClicked();" class="app-bar-element place-right branding"><span class="fa fa-bars"></span><span class="font-koodakBold" style="font-size:14pt"> دسترسی</span></a>
+        <span class="menu-search-box" style="display:none;">
+            <a class="place-right">
+                <span class="input-control text" style="margin-top:8px;">
+                    <input type="text" id="searchText" placeholder="جستجو" autocomplete="off">
+                </span>
+            </a>
+            
+            <span class="app-bar-divider"></span>
+        </span>
+
+        <a href="https://sama.gums.ac.ir/Education/Home" class="place-right branding university-logo" style="margin-right:3px;">
+            
+            <img src="./کارنامه_files/UniversityGilanLogo.png" style="height: 49px; display: inline-block;" title="دانشگاه علوم پزشکی گیلان" alt="لوگوی دانشگاه">
+        </a>
+        <a href="https://sama.gums.ac.ir/Education/Home" class="place-right branding university-title visible-lg visible-md">دانشگاه علوم پزشکی گیلان <span class="hide">Hamava version [1.0.8873.21831]</span></a>
+        
+    </span>
+    <div class="app-bar-pull left-menu-items">
+
+            <div style="display:inline-block;">
+                <a href="javascript:void(0);" id="notification-button" class="app-bar-element branding" title="پیام ها">
+                    <span class="fa fa-envelope-o font14"></span>
+                    <span class="counter unSeenMessageCount">0</span>
+                </a>
+            </div>
+            <div class="dropdown" style="display:inline-block;" title="کاربر جاری">
+                <div class="app-bar-element branding dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="fa-user fa font14"></span>
+                    <span class="hidden-xs">رادمهر افروزكلاردهي</span>
+                    
+                </div>
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                    <li><a> <span class="user-identity-name fa fa-copy" id="user-identity-id"> 140211124003 </span> </a> </li>
+                    <li><a href="https://sama.gums.ac.ir/CAS/Users/Profile" title="رادمهر افروزكلاردهي (140211124003)"> <span class="hidden-xs"><b>اطلاعات شخصی</b></span></a></li>
+                    
+                    <li><a href="https://sama.gums.ac.ir/CAS/Account/ChangePassword">تغییر کلمه عبور</a></li>
+                    <li><a href="https://sama.gums.ac.ir/CAS/Users/Email">تغییر آدرس ایمیل</a></li>
+                    <li><a href="https://sama.gums.ac.ir/CAS/Users/ChangeMobile">تغییر شماره موبایل</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li>
+                        <div>
+                            
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div style="display:inline-block;">
+                <a href="https://sama.gums.ac.ir/CAS/Account/Logout" title="خروج" class="app-bar-element branding"><span class="fa-power-off fa font14"></span></a>
+            </div>
+    </div>
+</header>
+<div class="start-menu no-padding ">
+    <div class="menu-container hide">
+        <div class="navy remove-bar hide">
+            <span id="trash-button" class="place-right branding app-bar-element ui-droppable">
+                <span class="fa fa-trash" style="margin-right:5px;margin-left:5px; font-size:20pt"></span>
+            </span>
+        </div>
+        <div id="full-menu" class="hide">
+            <div class="layer">
+                <div class="tile-container1 ">
+                    <div class="full-menu-container"><div class="full-menu-list"></div></div>
+                </div>
+            </div>
+        </div>
+        <div id="small-menu" class="tile-container hide ui-widget-header"></div>
+    </div>
+</div>
+<div class="arrow-up" style="display:none" id="notification-panel">
+</div>
+
+<script type="text/javascript">
+
+    var DisableHeavyProcess = "False";
+    var disableIt = false;
+
+    if (DisableHeavyProcess == "True")
+        disableIt = true;
+    else
+        disableIt = false;
+
+    var orginalUserMenuLinks = [{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-amber","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","Title":"EducationStudnetReports"},"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","URL":"/Grading/RevisionWorkbook","Title":"کارنامه موقت","MenuLinkId":"4e5ae015-ee5d-4a98-b291-12fb92a21b5d"},"MenuLinkId":"4e5ae015-ee5d-4a98-b291-12fb92a21b5d","NumberOfVisits":0,"Priority":0,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"eb81693c-d5c6-4858-b9e4-f7790dcd6047"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-orange","Description":"","IconURL":"change-password","IsActive":true,"MenuCategory":{"Application":{"Path":"/cas","Description":"ورود یکپارچه","ApplicationId":1,"Title":"Cas"},"ApplicationId":1,"MenuCategoryId":"8748a2df-7873-4eb3-b134-6304995940d2","Title":"CASPersonalInformation"},"MenuCategoryId":"8748a2df-7873-4eb3-b134-6304995940d2","URL":"/Account/ChangePassword","Title":"تغییر کلمه عبور","MenuLinkId":"1ad375e4-ade8-475c-bd26-15cf15f30ce2"},"MenuLinkId":"1ad375e4-ade8-475c-bd26-15cf15f30ce2","NumberOfVisits":0,"Priority":1,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"aebbb1e2-4d56-496b-9af4-c1d79d9dab6e"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-amber","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"637b0fa7-7859-4cab-a50e-70df0b4f2e50","Title":"EducationEducationalTerms"},"MenuCategoryId":"637b0fa7-7859-4cab-a50e-70df0b4f2e50","URL":"/StudentLessons/StudentLessonRoadMapRegister","Title":"انتخاب واحد","MenuLinkId":"d04a1299-7089-4d5e-b987-2e1c25d4ced5"},"MenuLinkId":"d04a1299-7089-4d5e-b987-2e1c25d4ced5","NumberOfVisits":0,"Priority":2,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"b58117f0-87b5-448b-9d47-e77001f24391"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-darkMagenta","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/cas","Description":"ورود یکپارچه","ApplicationId":1,"Title":"Cas"},"ApplicationId":1,"MenuCategoryId":"8748a2df-7873-4eb3-b134-6304995940d2","Title":"CASPersonalInformation"},"MenuCategoryId":"8748a2df-7873-4eb3-b134-6304995940d2","URL":"/Users/Profile","Title":"اطلاعات شخصی","MenuLinkId":"5f81d8f4-cf15-4359-aab1-3b5bee3e4b13"},"MenuLinkId":"5f81d8f4-cf15-4359-aab1-3b5bee3e4b13","NumberOfVisits":0,"Priority":3,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"ebe9ef69-b10d-4eb3-8468-68b0cb0e0569"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-emerald","Description":"","IconURL":"student-workbook","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","Title":"EducationStudnetReports"},"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","URL":"/Workbooks","Title":"کارنامه","MenuLinkId":"68243790-4204-4bb3-8d2f-3ca5c3d4ceea"},"MenuLinkId":"68243790-4204-4bb3-8d2f-3ca5c3d4ceea","NumberOfVisits":0,"Priority":4,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"80851c11-a809-49ef-ac94-54918e4b70a8"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-darkRed","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"637b0fa7-7859-4cab-a50e-70df0b4f2e50","Title":"EducationEducationalTerms"},"MenuCategoryId":"637b0fa7-7859-4cab-a50e-70df0b4f2e50","URL":"/StudentLessons/StudentWeeklyProgramInStudentPage","Title":"تایید انتخاب واحد و برنامه هفتگی","MenuLinkId":"d1ffb8e5-51a0-4445-9529-422badb4e7a3"},"MenuLinkId":"d1ffb8e5-51a0-4445-9529-422badb4e7a3","NumberOfVisits":0,"Priority":5,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"814e94d0-123d-490c-8a51-3422da82efc9"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-amber","Description":"درخواست عضویت استعداد درخشان","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"502dfcd9-fe67-4d59-9941-7a80716b5ded","Title":"Talented"},"MenuCategoryId":"502dfcd9-fe67-4d59-9941-7a80716b5ded","URL":"/TalentedStudentRequests/StudentRequest","Title":"درخواست عضویت استعداد درخشان","MenuLinkId":"683dbd90-33e9-4492-b040-5e0ae4e469b6"},"MenuLinkId":"683dbd90-33e9-4492-b040-5e0ae4e469b6","NumberOfVisits":0,"Priority":6,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"3307d7fb-7c6e-4758-9930-c6f7a24357c4"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-darkIndigo","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Demand","Description":"مدیریت درخواستها","ApplicationId":12,"Title":"Demand"},"ApplicationId":12,"MenuCategoryId":"593dbd3c-f9d8-471a-aeaa-148ea03eb8f2","Title":"DemandRegisterNewDemand"},"MenuCategoryId":"593dbd3c-f9d8-471a-aeaa-148ea03eb8f2","URL":"/UserDemands","Title":"لیست درخواست ها","MenuLinkId":"5617660c-f6b7-4b8b-975f-60d5cc1fd67d"},"MenuLinkId":"5617660c-f6b7-4b8b-975f-60d5cc1fd67d","NumberOfVisits":0,"Priority":7,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"61132862-b9a7-479f-80c8-b30d6cce7c94"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-amber","Description":"فعالیت های استعداد درخشان","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"502dfcd9-fe67-4d59-9941-7a80716b5ded","Title":"Talented"},"MenuCategoryId":"502dfcd9-fe67-4d59-9941-7a80716b5ded","URL":"/TalentedStudentActivities/Index","Title":"فعالیت های استعداد درخشان","MenuLinkId":"565d2743-2a47-4553-8b23-632354d47104"},"MenuLinkId":"565d2743-2a47-4553-8b23-632354d47104","NumberOfVisits":0,"Priority":8,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"fdf0c463-c45c-407e-9976-269bdbd09a2a"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-teal","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"637b0fa7-7859-4cab-a50e-70df0b4f2e50","Title":"EducationEducationalTerms"},"MenuCategoryId":"637b0fa7-7859-4cab-a50e-70df0b4f2e50","URL":"/StudentLessonCatalogs","Title":"نیمرخ تحصیلی","MenuLinkId":"4010277f-a11e-4205-a999-6f677ecb6cf0"},"MenuLinkId":"4010277f-a11e-4205-a999-6f677ecb6cf0","NumberOfVisits":0,"Priority":9,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"bf19d7f8-1e73-44d2-aecc-641e48854c5d"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-lime","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","Title":"EducationStudnetReports"},"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","URL":"/StudentLessons/StudentExamCard","Title":"نمایش و چاپ کارت امتحان","MenuLinkId":"8b20c83f-3044-4f52-9bd5-83e80cc89ca8"},"MenuLinkId":"8b20c83f-3044-4f52-9bd5-83e80cc89ca8","NumberOfVisits":0,"Priority":10,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"f583d8fd-7139-40df-993c-1e85cb5c7cb6"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-violet","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Evaluation","Description":"ارزشیابی","ApplicationId":5,"Title":"Evaluation"},"ApplicationId":5,"MenuCategoryId":"89df5319-6e3c-442f-b115-9fa5a1caaa07","Title":"EvaluationStudents"},"MenuCategoryId":"89df5319-6e3c-442f-b115-9fa5a1caaa07","URL":"/StudentForms","Title":"ارزشیابی نیمسال جاری","MenuLinkId":"1ba50776-1c6b-44dd-83b5-90a3e41824bd"},"MenuLinkId":"1ba50776-1c6b-44dd-83b5-90a3e41824bd","NumberOfVisits":0,"Priority":11,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"40118dcf-920f-4733-a8e1-1de94c4fc3ca"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-violet","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Evaluation","Description":"ارزشیابی","ApplicationId":5,"Title":"Evaluation"},"ApplicationId":5,"MenuCategoryId":"89df5319-6e3c-442f-b115-9fa5a1caaa07","Title":"EvaluationStudents"},"MenuCategoryId":"89df5319-6e3c-442f-b115-9fa5a1caaa07","URL":"/RotationalStudentForms","Title":"ارزشیابی دوره‌ای بهداشت","MenuLinkId":"a23fd359-0a47-42c0-88fc-925fef193451"},"MenuLinkId":"a23fd359-0a47-42c0-88fc-925fef193451","NumberOfVisits":0,"Priority":12,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"6fb6e989-84a5-4e20-a5a7-089ab19a608b"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-darkCyan","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/OnlinePayment","Description":"پرداخت آنلاین","ApplicationId":10,"Title":"OnlinePayment"},"ApplicationId":10,"MenuCategoryId":"5508878c-2064-4015-b1be-db28d0da1542","Title":"EducationOnlinePayments"},"MenuCategoryId":"5508878c-2064-4015-b1be-db28d0da1542","URL":"/home/ClearDebit","Title":"پرداخت برخط شهریه","MenuLinkId":"751f3197-184f-4a15-aac3-bcab353d0113"},"MenuLinkId":"751f3197-184f-4a15-aac3-bcab353d0113","NumberOfVisits":0,"Priority":13,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"ef7882bc-c197-492e-b58e-f1920328a7c1"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-yellow","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Demand","Description":"مدیریت درخواستها","ApplicationId":12,"Title":"Demand"},"ApplicationId":12,"MenuCategoryId":"593dbd3c-f9d8-471a-aeaa-148ea03eb8f2","Title":"DemandRegisterNewDemand"},"MenuCategoryId":"593dbd3c-f9d8-471a-aeaa-148ea03eb8f2","URL":"/Faqs","Title":"سوالات متداول","MenuLinkId":"f4c0682c-313d-4318-852f-c16003e2b48f"},"MenuLinkId":"f4c0682c-313d-4318-852f-c16003e2b48f","NumberOfVisits":0,"Priority":14,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"ee13aa44-d272-433b-be98-5e479fa13473"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-yellow","Description":"","IconURL":"student-financial","IsActive":true,"MenuCategory":{"Application":{"Path":"/Financial","Description":"مالی","ApplicationId":3,"Title":"Financial"},"ApplicationId":3,"MenuCategoryId":"d70abd75-af6c-456a-a51f-2b76cdeefdac","Title":"FinancialReports"},"MenuCategoryId":"d70abd75-af6c-456a-a51f-2b76cdeefdac","URL":"/Reports/StudentTotalFinancials/Student","Title":"کارنامه مالی دانشجو","MenuLinkId":"517c0aa7-84d8-465d-b349-d1d514328f07"},"MenuLinkId":"517c0aa7-84d8-465d-b349-d1d514328f07","NumberOfVisits":0,"Priority":15,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"447e9783-6634-479b-a206-a08d79f4bbe3"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-amber","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","Title":"EducationStudnetReports"},"MenuCategoryId":"3d372d32-a421-4398-b1c2-9b1e01c3cd81","URL":"/Grading/RevisionWorkbookMedicalRotation","Title":"کارنامه موقت دوره‌ای","MenuLinkId":"55417628-5600-44d4-aace-e05a7a5e75c5"},"MenuLinkId":"55417628-5600-44d4-aace-e05a7a5e75c5","NumberOfVisits":0,"Priority":16,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"790773dc-ac5f-449a-b6fd-e177de04a2f7"},{"IsPinned":true,"MenuLink":{"CSSClass":"","ColorClass":"bg-darkCyan","Description":"","IconURL":"","IsActive":true,"MenuCategory":{"Application":{"Path":"/Education","Description":"آموزش","ApplicationId":2,"Title":"Education"},"ApplicationId":2,"MenuCategoryId":"149a2120-d717-45e3-bc79-fdd37cda23b8","Title":"EducationStudentGroup"},"MenuCategoryId":"149a2120-d717-45e3-bc79-fdd37cda23b8","URL":"/StudentFiles/Index","Title":"اسناد دانشجویان","MenuLinkId":"ec0f1be2-1f45-4eea-b0b9-e37627055a5d"},"MenuLinkId":"ec0f1be2-1f45-4eea-b0b9-e37627055a5d","NumberOfVisits":0,"Priority":17,"TileType":1,"UserId":"aec99266-0263-411c-b363-85bda8a6c2b1","UserMenuLinkId":"23250579-93f7-4824-9602-efd99b90d3de"}];
+
+    var currentUserId = "aec99266-0263-411c-b363-85bda8a6c2b1";
+    
+
+
+    var menuStatuses={close:0,search:1,start:2,fullMenu:3};var editMode=!1;var pinMode=!1;var dragMode=!1;var immediatelyTaphold=!1;var menuStatus=menuStatuses.close;var reloadMenu=!1;var MENU_ITEM_HEIGHT=52;var MENU_ITEM_WIDTH=250;var userMenuLinks=orginalUserMenuLinks;var orginalAllMenuLinks=[];var allMenuLinks=[];var menuCategoryIds=[];var cntrlIsPressed=!1;var persianChar=["ض","ص","ث","ق","ف","غ","ع","ه","خ","ح","ج","چ","ش","س","ی","ب","ل","ا","ت","ن","م","ک","گ","ظ","ط","ز","ر","ذ","د","پ","و","؟"],englishChar=["q","w","e","r","t","y","u","i","o","p","[","]","a","s","d","f","g","h","j","k","l",";","'","z","x","c","v","b","n","m",",","?"];function ToPersianChars(input){var res='';for(var i=0;i<input.length;i++){res+=persianChar[englishChar.indexOf(input[i])]||input[i]}return res}
+    function Menu_Column_Height(){return Get_Window_Hight()-230}
+    function Get_Window_Hight(){return document.documentElement.clientHeight}
+    function Get_Window_width(){return document.documentElement.clientWidth}
+    $(document).keydown(function(event){if(event.which=="17")
+        cntrlIsPressed=!0});$(document).keyup(function(){cntrlIsPressed=!1});function CloseMenu(){var menu=$('.menu-container');menuStatus=menuStatuses.close;menu.addClass('hide');var page=$('.container');page.removeClass("hide");$(".menu-search-box").hide().fadeOut();editMode=!1;pinMode=!1;$('.university-logo').removeClass('hide');$('.left-menu-items').removeClass('hide');$('header.app-bar').removeClass('hide');$('.navy.remove-bar').addClass('hide')}
+    function ShowMenu(){GetUserMenuDatas(function(){if(orginalUserMenuLinks.length==0){menuStatus=menuStatuses.fullMenu;ShowFullMenu()}else{CreateSmallMenu();menuStatus=menuStatuses.start;if(Get_Window_width()<500){$('.university-logo').addClass('hide');$('.left-menu-items').addClass('hide')}
+        $('#full-menu').addClass('hide');$('#small-menu').removeClass('hide');$("#change-tile-button").removeClass('hide');$('.menu-container').removeClass('hide');AnimateTiles()}
+        $(".menu-search-box").show().fadeIn();$('#searchText').focus()})}
+    function ShowFullMenu(){menuStatus=menuStatuses.fullMenu;$('#full-menu').removeClass('hide');$('#small-menu').addClass('hide');$('.menu-container').removeClass('hide');$('.container').addClass("hide");if(orginalAllMenuLinks&&orginalAllMenuLinks.length>0){CreateFullMenu()}
+    else{GetMenuDatas(function(){CreateFullMenu();SearchMenu()})}}
+    function SearchMenu(){menuStatus=menuStatuses.search;$("#change-tile-button").addClass('hide');var searchString=$("#searchText").val();if(searchString==''){allMenuLinks=orginalAllMenuLinks}
+    else { allMenuLinks = _.filter(orginalAllMenuLinks, function (a) { return a.Title.toLowerCase().indexOf(searchString.toLowerCase()) >= 0 || a.Title.indexOf(ToPersianChars(searchString.toLowerCase())) >= 0 || a.MenuCategory.Title.toLowerCase().indexOf(searchString.toLowerCase()) >= 0 || a.MenuCategory.Title.indexOf(ToPersianChars(searchString.toLowerCase())) >= 0 || a.MenuCategory.Application.Description.toLowerCase().indexOf(searchString.toLowerCase()) >= 0 || a.MenuCategory.Application.Description.indexOf(ToPersianChars(searchString.toLowerCase())) >= 0 })}
+        RefreshMenu()}
+    function RefreshMenu(){if(menuStatus==menuStatuses.fullMenu||menuStatus==menuStatuses.search){ShowFullMenu()}}
+    function resizeMenuSize(){RefreshMenu()};function MenuClicked(){if(menuStatus!=menuStatuses.close){$('#searchText').val('');CloseMenu()}else{ShowMenu()}}
+    function GetUserMenuDatas(callback){if(reloadMenu){$.get('/CAS/Home/GetUserMenuLinks').done(function(result){orginalUserMenuLinks=result.userMenuLinks;userMenuLinks=orginalUserMenuLinks;reloadMenu=!1;if(typeof(callback)=='function'){callback()}})}else{if(typeof(callback)=='function'){callback()}}}
+    function GetMenuDatas(callback){$.get('/CAS/Home/GetAllMenuLinks').done(function(result){orginalAllMenuLinks=result.menuLinks;allMenuLinks=orginalAllMenuLinks;menuCategoryIds=result.menuCategoryIds;if(typeof(callback)=='function'){callback()}})}
+    function NumberOfMenuColumns(){if(!allMenuLinks){return 1;}return(allMenuLinks.length+menuCategoryIds.length)/(GetNumberOfItemsInColumn())}
+    function GetNumberOfItemsInColumn(){var res=Menu_Column_Height()/MENU_ITEM_HEIGHT;if(res<2)res=2;return(res).toFixed(0)}
+    function SetFullMenuListWidth(){$('.full-menu-list').css('width',((NumberOfMenuColumns()+1)*MENU_ITEM_WIDTH).toFixed(2)+'px')}
+    function CreateSmallMenu(){$('#small-menu').html("");for(var i=0;i<userMenuLinks.length;i++){$('#small-menu').append(CreateSmallMenuLink(userMenuLinks[i],i))}
+        $("#small-menu").sortable({opacity:0.7,tolerance:"pointer",cancel:".disable-sort-item"});$("#small-menu").disableSelection()}
+    function CreateSmallMenuLink(userMenuLink,index){if(userMenuLink.IsPinned==!1)return '';var iconElement='';if(userMenuLink.MenuLink.IconURL==""){iconElement='<span class="icon-tile fa fa-link "></span>'}else{iconElement='<span class="hamava-icon-tile hamava-menu-icons-image hamava-menu-icon-small '+userMenuLink.MenuLink.IconURL+'"></span>'}
+        var tileType="";switch(userMenuLink.TileType){case 0:tileType='tile-small';break;case 1:tileType='tile';break;case 2:tileType='tile-wide';break;case 3:tileType='tile-large';break;default:tileType='tile'}
+        var lableHideClass='';var title=userMenuLink.MenuLink.Title;if(title==null){title=''}
+        var labelTitle=title;if(title.length>MaxLabelLength(tileType)){labelTitle=title.substring(0,MaxLabelLength(tileType)-2)+'...'}
+        var url=userMenuLink.MenuLink.MenuCategory.Application.Path+userMenuLink.MenuLink.URL;var TileTypeBtnHideClass='hide';if(editMode){TileTypeBtnHideClass=''}
+        var color='menu-tile-default-color';if(userMenuLink.MenuLink.ColorClass!=''){color=userMenuLink.MenuLink.ColorClass}
+        var id=userMenuLink.UserMenuLinkId;return '<div class="'+userMenuLink.MenuLink.CSSClass+' '+color+' '+tileType+' menu-tile ui-widget-content disable-sort-item" data-role="tile"  data-url="'+url+'" title="'+title+'" userMenuLinkId="'+id+'" tabindex="0" >'+'<div class="tile-content iconic">'+'<span class="tile-type-btn '+TileTypeBtnHideClass+' tile-small-btn fa fa-compress" title="کوچک"></span>'+'<span class="tile-type-btn '+TileTypeBtnHideClass+' tile-medium-btn fa fa-square" title="متوسط"></span>'+'<span class="tile-type-btn '+TileTypeBtnHideClass+' tile-wide-btn fa fa-arrows-h" title="عریض"></span>'+'<span class="tile-type-btn '+TileTypeBtnHideClass+' tile-large-btn fa fa-expand" title="بزرگ"></span>'+iconElement+'<span class="tile-label '+lableHideClass+'">'+labelTitle+'</span>'+'</div>'+'</div>'}
+    function MaxLabelLength(tileType){if(tileType=='tile'){return 20}else if(tileType=='tile-small'){return 16}
+        return 40}
+    function AnimateTiles(){var tiles=$(".tile, .tile-small, .tile-sqaure, .tile-wide, .tile-large, .tile-big, .tile-super");$.each(tiles,function(){var tile=$(this);tile.css({opacity:0,"-webkit-transform":"scale(.5)","transform":"scale(.5)",})});$.each(tiles,function(){var tile=$(this);setTimeout(function(){tile.css({opacity:1,"-webkit-transform":"scale(1)","transform":"scale(1)","-webkit-transition":".3s","transition":".3s"})},Math.floor(Math.random()*500))});setTimeout(function(){$.each(tiles,function(){var tile=$(this);tile.css({"-webkit-transition":"0s","transition":"0s"})})},550)}
+    {function CreateFullMenu(){SetFullMenuListWidth();$(".full-menu-list").html("");var counter=0;var rowCounter=0;var colCounter=0;for(var i=0;i<NumberOfMenuColumns();i++){var menu_column=document.createElement('div');$(menu_column).addClass('menu-column').attr('col-number',i).css('height',Menu_Column_Height()+'px').appendTo($(".full-menu-list"))}
+        for(var menuCategoryIndex in menuCategoryIds){var currentAppUserLinks=_.filter(allMenuLinks,function(a){return a.MenuCategory.MenuCategoryId==menuCategoryIds[menuCategoryIndex]});currentAppUserLinks=_.sortBy(currentAppUserLinks,function(item){return item.Title});if(currentAppUserLinks.length>0){if(counter<allMenuLinks.length+menuCategoryIds.length){$("div[col-number='"+colCounter+"']").append(CreateApplicationTitle(currentAppUserLinks[0]));counter++}
+            if(rowCounter<GetNumberOfItemsInColumn()-1){rowCounter++}else{rowCounter=0;colCounter++}
+            for(var i=0;i<currentAppUserLinks.length;i++){if(counter<allMenuLinks.length+menuCategoryIds.length){$("div[col-number='"+colCounter+"']").append(CreateFullMenuLink(currentAppUserLinks[i]));counter++}
+                if(rowCounter<GetNumberOfItemsInColumn()-1){rowCounter++}else{rowCounter=0;colCounter++}}}}}
+        function CreateFullMenuLink(menuLink){var iconElement="";var isPinedClass="";var url=menuLink.MenuCategory.Application.Path+menuLink.URL;var title=menuLink.Title;var id=menuLink.MenuLinkId;var cssClass=menuLink.CSSClass;var iconUrl=menuLink.IconURL;var color='menu-tile-default-color';if(menuLink.ColorClass!=''){color=menuLink.ColorClass}
+            if(iconUrl==''){iconUrl=' fa fa-link '}
+            else{iconUrl = 'hamava-menu-icons-image hamava-menu-icon-full '+iconUrl;}
+            iconElement='<span class="hamava-icon-tile '+iconUrl+' '+color+'"></span>';
+            if(IsPinned(menuLink)){isPinedClass="pinned"}
+            var isPinModeClass="hide";if(pinMode){isPinModeClass=""}
+            return '<div class="menu-item" title="'+title+'" data-url="'+url+'" tabindex="0" >'+iconElement+'<span class="title">'+title+'</span>'+'<span class="pin fa fa-thumb-tack '+isPinedClass+' '+isPinModeClass+'" title="اضافه به علاقه‌مندی‌ها" data-id="'+id+'" ></span>'+'</div>'}
+        function CreateApplicationTitle(menuLink){return '<div class="application-title" title="'+menuLink.MenuCategory.Application.Description+': '+menuLink.MenuCategory.Title+'">'+'<span class="title">'+menuLink.MenuCategory.Application.Description+': '+menuLink.MenuCategory.Title+'</span>'+'</div>'}
+        function IsPinned(menuLink){var userMenuLink=_.filter(userMenuLinks,function(a){return a.MenuLinkId==menuLink.MenuLinkId});return userMenuLink[0]&&userMenuLink[0].IsPinned==!0}}(function($){$.StartScreen=function(){var plugin=this;var width=(window.innerWidth>0)?window.innerWidth:screen.width;plugin.init=function(){setTilesAreaSize();if(width>640)addMouseWheel()};var setTilesAreaSize=function(){var groups=$(".tile-group");var tileAreaWidth=80;$.each(groups,function(i,t){if(width<=640){tileAreaWidth=width}else{tileAreaWidth+=$(t).outerWidth()+80}});$(".tile-area").css({width:tileAreaWidth})};var addMouseWheel=function(){$("body").mousewheel(function(event,delta,deltaX,deltaY){var page=$(document);var scroll_value=delta*50;page.scrollLeft(page.scrollLeft()-scroll_value);return!1})};plugin.init()}})(jQuery);function ChangeTileType(id,tileTypeId){$.post("/CAS/Home/ChangeUserMenuTileType",{userMenuLinkId:id,tileTypeId:tileTypeId}).done(function(res){reloadMenu=!0})}
+    $(function(){$("#small-menu").off("sortstop").on("sortstop",function(event,ui){var data=[];$("#small-menu .menu-tile").each(function(n){data[n]=$(this).attr('userMenuLinkId')});$.ajax({url:"/CAS/Home/ArrangeUserMenuLinks",type:"POST",datatype:"json",traditional:!0,data:{userMenuLinkIds:data,},success:function(data){reloadMenu=!0}})});$(document).off('click  ','.full-menu-btn1').on('click  ','.full-menu-btn1',function(){if(menuStatus==menuStatuses.start||menuStatus==menuStatuses.search){ShowFullMenu(!1)}});$(document).off('mousedown  ','.tile-type-btn').on('mousedown  ','.tile-type-btn',function(e){e.preventDefault();var self=$(this);var menuTile=self.closest('.menu-tile');var id=menuTile.attr('userMenuLinkId');menuTile.css({"-webkit-transition":"0.4s","transition":"0.4s"});menuTile.removeClass('tile').removeClass('tile-small').removeClass('.tile-sqaure').removeClass('tile-wide').removeClass('tile-large');if(self.hasClass('tile-large-btn')){menuTile.addClass('tile-large');ChangeTileType(id,3)}else if(self.hasClass('tile-small-btn')){menuTile.addClass('tile-small');ChangeTileType(id,0)}
+    else if(self.hasClass('tile-medium-btn')){menuTile.addClass('tile');ChangeTileType(id,1)}
+    else if(self.hasClass('tile-wide-btn')){menuTile.addClass('tile-wide');ChangeTileType(id,2)}
+        menuTile.css({"-webkit-transition":"0s","transition":"0s"});return!1});$(document).off('click','#searchText').on('click','#searchText',function(){SearchMenu()});$(document).off('input','#searchText').on('input','#searchText',function(){SearchMenu()});function SetTrashIconToCenterOfMenu(){var right=($("#small-menu").width()/2)-($('#trash-button').width()/2);$('#trash-button').css({'margin-right':right+'px','margin-top':'-50px'}).animate({'margin-top':0+'px'},400)}
+        var resizeTimer;$(window).resize(function(){clearTimeout(resizeTimer);resizeTimer=setTimeout(resizeMenuSize,100)});$(document).off('click  ','.pin').on('click  ','.pin',function(e){e.preventDefault();var self=$(this);var id=$(this).attr('data-id');$.post("/CAS/Home/TugglePinItem",{menuLinkId:id}).done(function(res){if(res.isError==!1){if($(self).hasClass('pinned')){$(self).removeClass('pinned')}else{$(self).addClass('pinned')}
+            reloadMenu=!0}})});$(document).off('keyup','.menu-item , .menu-tile , #searchText').on('keyup','.menu-item , .menu-tile , #searchText',function(event){if(event.keyCode==27){CloseMenu()}});$(document).off('keypress','.menu-item').on('keypress','.menu-item',function(event){if(event.keyCode==13){$(this).trigger("click")}});$(document).off('keypress','.menu-tile').on('keypress','.menu-tile',function(event){if(event.keyCode==13){$(this).trigger("click")}});$(document).off('keydown','.menu-item').on('keydown','.menu-item',function(e){if(menuStatus==menuStatuses.fullMenu){switch(e.keyCode){case 37:break;case 38:$('.menu-item').eq(parseInt($('.menu-item').index($(this)),10)-1).focus();break;case 39:break;case 40:$('.menu-item').eq(parseInt($('.menu-item').index($(this)),10)+1).focus();break;case 8:$('#searchText').focus();break;case 46:$('#searchText').focus();break;default:}}});$(document).off('keydown','.menu-tile').on('keydown','.menu-tile',function(e){if(menuStatus==menuStatuses.start){if(e.keyCode==37){}else if(e.keyCode==38){$('.menu-tile').eq(parseInt($('.menu-tile').index($(this)),10)-1).focus()}else if(e.keyCode==39){}else if(e.keyCode==40){$('.menu-tile').eq(parseInt($('.menu-tile').index($(this)),10)+1).focus()}}});$(document).off('keydown','#searchText').on('keydown','#searchText',function(e){if(menuStatus==menuStatuses.fullMenu){if(e.keyCode==40){$('.menu-item:first').focus()}}else if(menuStatus==menuStatuses.start){if(e.keyCode==40){$('.menu-tile:first').focus()}}});$(document).off('taphold','.menu-tile').on('taphold','.menu-tile',function(e){if(!dragMode){tuggleEditMode()}
+                e.preventDefault();return!1});function tuggleEditMode(){if(editMode){$('.tile-type-btn').addClass('hide');$('.menu-tile').addClass('disable-sort-item');$('header.app-bar.navy').removeClass('hide');$('.navy.remove-bar').addClass('hide');SetTrashIconToCenterOfMenu();immediatelyTaphold=!0}else{$('.tile-type-btn').removeClass('hide');$('.menu-tile').removeClass('disable-sort-item');$('header.app-bar.navy').addClass('hide');$('.navy.remove-bar').removeClass('hide');SetTrashIconToCenterOfMenu()}
+                    editMode=!editMode}
+        function TileClick($this,e){if(immediatelyTaphold){immediatelyTaphold=!1}else if(!editMode){if(e&&(e.which==2||e.button==4||cntrlIsPressed)){window.open($this.attr("data-url"),"_blank")}else{$this.append('<div class="loading" style="text-align:center;"><img src="/CAS/CDN/images/load.svg" alt="" /></div>');window.open($this.attr("data-url"),"_self")}}
+            return!1}
+        $(document).off('click','.menu-tile').on('click','.menu-tile',function(e){e.preventDefault();e=e||window.event;TileClick($(this),e)});$(document).off('mouseup','.menu-tile').on('mouseup','.menu-tile',function(e){e.preventDefault();e=e||window.event;if(e.which==2||e.button==4){TileClick($(this),e)}});$("#small-menu").on("sortstart",function(event,ui){dragMode=!0});$("#small-menu").on("sortstop",function(event,ui){dragMode=!1});function MenuItemClick($this,e){e=e||window.event;e.preventDefault();if(immediatelyTaphold){immediatelyTaphold=!1}else if(!pinMode){if(e&&(e.which==2||e.button==4||cntrlIsPressed)){window.open($this.attr("data-url"),"_blank")}else{$this.append('<div class="loading" style="text-align:center;"><img src="/CAS/CDN/images/load.svg" alt="" /></div>');window.open($this.attr("data-url"),"_self")}}
+            return!1}
+        $(document).off('click','.menu-item').on('click','.menu-item',function(e){MenuItemClick($(this),e)});$(document).off('mouseup','.menu-item').on('mouseup','.menu-item',function(e){e.preventDefault();e=e||window.event;if(e.which==2||e.button==4){MenuItemClick($(this),e)}});$(document).off('taphold','.menu-item').on('taphold','.menu-item',function(e){e.preventDefault();immediatelyTaphold=!0;pinMode=!pinMode;if(pinMode){$('.menu-item .pin').removeClass('hide')}else{$('.menu-item .pin').addClass('hide')}
+            return!1});$('#trash-button').droppable({over:function(event,ui){},drop:function(event,ui){ui.draggable.hide("explode",{pieces:25},1000);var self=ui.draggable;var menuTile=self.closest('.menu-tile');var id=menuTile.attr('userMenuLinkId');$.post("/CAS/Home/UnPinItem",{menuLinkId:id}).done(function(res){if(res.isError==!1){menuTile.hide("explode",800);ui.draggable.remove()}})}});$(document).off('click','body').on('click','body',function(e){if(menuStatus!=menuStatuses.close){if(!(e.target.id=="small-menu"||$(e.target).parents("#small-menu").size()||e.target.hasClass=="app-bar-pull"||$(e.target).parents(".app-bar-pull").size()||e.target.id=="full-menu"||$(e.target).parents("#full-menu").size())){CloseMenu()}}})})
+
+
+
+    //For message passing System
+    var isAuthenticated = "True";
+    var loadingHtml = '<div style="text-align:center;"><img src="/CAS/CDN/images/load.svg" alt="" /></div>';
+    function getUnseenMessageCount() {
+        $.get("/CAS/MessagingSystem/GetUnseenNotificationCount").success(function(result) {
+            $(".unSeenMessageCount").html(result.unSeenNotificationCount);
+        });
+    };
+
+    function ShowAlertDialogIfNeed() {
+        $.get("/CAS/MessagingSystem/GetUnseenAlertCount").success(function(result) {
+            if (result.unSeenAlertCount > 0)
+                $("#common-dialog").loadDialog({ url: '/CAS/MessagingSystem/Alerts', title: 'توجه' });
+        });
+    };
+
+    $(function () {
+        $(document).off('click', '#ticket-button');
+        $(document).on('click', '#ticket-button', function () {
+            var ticketUrl = "/CAS/Home/TicketInfo";
+            $.get(ticketUrl, null).success(function (result) {
+                var $form = $("#ticket-form");
+                $form.attr('action',"http://club.samasoft.ir");
+                var input = $("<input>").attr("type", "hidden").attr("name","firstname").val(result.FirstName);
+                $form.append(input);
+                input = $("<input>").attr("type", "hidden").attr("name","lastname").val(result.LastName);
+                $form.append(input);
+                input = $("<input>").attr("type", "hidden").attr("name","nationalcode").val(result.NationalCode);
+                $form.append(input);
+                input = $("<input>").attr("type", "hidden").attr("name","username").val(result.username);
+                $form.append(input);
+                input = $("<input>").attr("type", "hidden").attr("name", "universitytitle").val('UniversityGilan');
+                $form.append(input);
+                $form.submit();
+            });
+        });
+
+        $(document).off('click', '#notification-button');
+        $(document).on('click', '#notification-button', function () {
+            if ($('#notification-panel').css('display') == 'none') {
+                $.get("/CAS/MessagingSystem/Notifications").success(function (result) {
+                    $("#notification-panel").html(result);
+                });
+            }
+            $("#notification-panel").slideToggle(150);
+        });
+
+        if (isAuthenticated == "True") {
+            if (!disableIt)
+            {
+                getUnseenMessageCount();
+            }
+            if (location.pathname.indexOf('/ShowAllMessages') == -1)
+            {
+                ShowAlertDialogIfNeed();
+            }
+        }
+        //اخرین گریدی که روی آن کلیک شده است
+        $('.k-grid').click(function () {
+            lastId = $(this).attr("id");
+            GridCellClick(lastId);
+        });
+
+        $('.user-identity-name').click(function() {
+            copyToClipboard($(this).text());
+        });
+    });
+</script>
+
+<style>
+    #user-identity-id:hover {
+        cursor: pointer;
+    }
+</style>
+
+    
+    <div class="container-fluid">
+        
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <label>کارنامه</label>
+    </div>
+    <div class="row">
+<form action="https://sama.gums.ac.ir/Education/Workbooks/TotalStudentPrintStimul" method="get" target="_blank"></form>
+        
+    </div>
+    <div class="panel-body">
+        <ul class="nav nav-tabs" id="myTab" data-tabs="tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="https://sama.gums.ac.ir/Education/Workbooks#14021" aria-expanded="true">
+                            نیمسال 14021
+                        </a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="https://sama.gums.ac.ir/Education/Workbooks#14022">
+                            نیمسال 14022
+                        </a>
+                    </li>
+
+        </ul>
+        <div id="my-tab-content" class="tab-content">
+                <div class="tab-pane active" id="14021">
+                    
+<div id="gridID" class="litegrid-parent">
+    <div id="StudentLessonGrid" class="liteGrid grid-22 ">
+	<div class="gridHeaderRow">
+		<div class="cell span-## width-40" name="RowIndex" title="ردیف">
+			<div class="sortImage">
+
+			</div><span>ردیف</span>
+		</div><div class="cell span-## width-130" name="TermLesson.Lesson.LessonCode" title="کد درس">
+			<div class="sortImage">
+
+			</div><span>کد درس</span>
+		</div><div class="cell span-## sortedColumn asc width-200" name="TermLesson.Lesson.LessonName" title="نام درس">
+			<div class="sortImage">
+
+			</div><span>نام درس</span>
+		</div><div class="cell span-## width-70" name="TermLesson.LessonGroup" title="گروه درس">
+			<div class="sortImage">
+
+			</div><span>گروه درس</span>
+		</div><div class="cell span-## width-80" name="TermLesson.Lesson.TheoreticalUnit" title="واحد نظری">
+			<div class="sortImage">
+
+			</div><span>واحد نظری</span>
+		</div><div class="cell span-## width-80" name="TermLesson.Lesson.PracticalUnit" title="واحد عملی">
+			<div class="sortImage">
+
+			</div><span>واحد عملی</span>
+		</div><div class="cell span-## width-100" name="GradeStr" title="نمره">
+			<div class="sortImage">
+
+			</div><span>نمره</span>
+		</div><div class="cell span-## width-140" name="LessonGradeStatus.Title" title="عنوان">
+			<div class="sortImage">
+
+			</div><span>عنوان</span>
+		</div>
+	</div><ul class="gridRows">
+		<li class="gridRowEven"><div title="1" class="cell span-1 centerAlign width-40">
+			1
+		</div><div title="14196" class="cell span-3 rightAlign width-130">
+			14196
+		</div><div title="آداب پزشکی 1 " class="cell span-3 rightAlign width-200">
+			آداب پزشکی 1 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="0/5" class="cell span-3 centerAlign width-80">
+			0/5
+		</div><div title="17.75" class="cell span-3 rightAlign width-100">
+			17.75
+		</div><div title="بی‌اثر در معدل نیمسال و معدل کل" class="cell span-3 rightAlign width-140">
+			بی‌اثر در معدل نیمسال و معدل کل
+		</div></li><li class="gridRowOdd"><div title="2" class="cell span-1 centerAlign width-40">
+			2
+		</div><div title="13396" class="cell span-3 rightAlign width-130">
+			13396
+		</div><div title="اصول خدمات سلامت " class="cell span-3 rightAlign width-200">
+			اصول خدمات سلامت 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="1/5" class="cell span-3 centerAlign width-80">
+			1/5
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="11.5" class="cell span-3 rightAlign width-100">
+			11.5
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowEven"><div title="3" class="cell span-1 centerAlign width-40">
+			3
+		</div><div title="1209602" class="cell span-3 rightAlign width-130">
+			1209602
+		</div><div title="بیوشیمی مولکول -سلول(عملی) " class="cell span-3 rightAlign width-200">
+			بیوشیمی مولکول -سلول(عملی) 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="0/4" class="cell span-3 centerAlign width-80">
+			0/4
+		</div><div title="11.9" class="cell span-3 rightAlign width-100">
+			11.9
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowOdd"><div title="4" class="cell span-1 centerAlign width-40">
+			4
+		</div><div title="1209601" class="cell span-3 rightAlign width-130">
+			1209601
+		</div><div title="بیوشیمی مولکول -سلول(نظری) " class="cell span-3 rightAlign width-200">
+			بیوشیمی مولکول -سلول(نظری) 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="1/9" class="cell span-3 centerAlign width-80">
+			1/9
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="7.1" class="cell span-3 rightAlign width-100">
+			7.1
+		</div><div title="مردود" class="cell span-3 rightAlign width-140">
+			مردود
+		</div></li><li class="gridRowEven"><div title="5" class="cell span-1 centerAlign width-40">
+			5
+		</div><div title="1896" class="cell span-3 rightAlign width-130">
+			1896
+		</div><div title="تربیت بدنی 1 " class="cell span-3 rightAlign width-200">
+			تربیت بدنی 1 
+		</div><div title="2" class="cell span-3 rightAlign width-70">
+			2
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="1" class="cell span-3 centerAlign width-80">
+			1
+		</div><div title="20" class="cell span-3 rightAlign width-100">
+			20
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowOdd"><div title="6" class="cell span-1 centerAlign width-40">
+			6
+		</div><div title="114096" class="cell span-3 rightAlign width-130">
+			114096
+		</div><div title="روانشناسی سلامت " class="cell span-3 rightAlign width-200">
+			روانشناسی سلامت 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="2" class="cell span-3 centerAlign width-80">
+			2
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="10" class="cell span-3 rightAlign width-100">
+			10
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowEven"><div title="7" class="cell span-1 centerAlign width-40">
+			7
+		</div><div title="145966" class="cell span-3 rightAlign width-130">
+			145966
+		</div><div title="زبان پیش دانشگاهی" class="cell span-3 rightAlign width-200">
+			زبان پیش دانشگاهی
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="2" class="cell span-3 centerAlign width-80">
+			2
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="15.5" class="cell span-3 rightAlign width-100">
+			15.5
+		</div><div title="بی‌اثر در معدل نیمسال و معدل کل" class="cell span-3 rightAlign width-140">
+			بی‌اثر در معدل نیمسال و معدل کل
+		</div></li><li class="gridRowOdd"><div title="8" class="cell span-1 centerAlign width-40">
+			8
+		</div><div title="1029602" class="cell span-3 rightAlign width-130">
+			1029602
+		</div><div title="علوم تشریح اسکلتی - عضلانی (عملی)" class="cell span-3 rightAlign width-200">
+			علوم تشریح اسکلتی - عضلانی (عملی)
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="0/6" class="cell span-3 centerAlign width-80">
+			0/6
+		</div><div title="" class="cell span-3 rightAlign width-100">
+			
+		</div><div title="نمره گزارش نشده" class="cell span-3 rightAlign width-140">
+			نمره گزارش نشده
+		</div></li><li class="gridRowEven"><div title="9" class="cell span-1 centerAlign width-40">
+			9
+		</div><div title="1029601" class="cell span-3 rightAlign width-130">
+			1029601
+		</div><div title="علوم تشریح اسکلتی - عضلانی(نظری) " class="cell span-3 rightAlign width-200">
+			علوم تشریح اسکلتی - عضلانی(نظری) 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="1/8" class="cell span-3 centerAlign width-80">
+			1/8
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="9.5" class="cell span-3 rightAlign width-100">
+			9.5
+		</div><div title="مردود" class="cell span-3 rightAlign width-140">
+			مردود
+		</div></li><li class="gridRowOdd"><div title="10" class="cell span-1 centerAlign width-40">
+			10
+		</div><div title="1696" class="cell span-3 rightAlign width-130">
+			1696
+		</div><div title="فارسی " class="cell span-3 rightAlign width-200">
+			فارسی 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="3" class="cell span-3 centerAlign width-80">
+			3
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="9" class="cell span-3 rightAlign width-100">
+			9
+		</div><div title="مردود" class="cell span-3 rightAlign width-140">
+			مردود
+		</div></li><li class="gridRowEven"><div title="11" class="cell span-1 centerAlign width-40">
+			11
+		</div><div title="1179602" class="cell span-3 rightAlign width-130">
+			1179602
+		</div><div title="فیزیولوژی خون(عملی) " class="cell span-3 rightAlign width-200">
+			فیزیولوژی خون(عملی) 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="0/1" class="cell span-3 centerAlign width-80">
+			0/1
+		</div><div title="16" class="cell span-3 rightAlign width-100">
+			16
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowOdd"><div title="12" class="cell span-1 centerAlign width-40">
+			12
+		</div><div title="1179601" class="cell span-3 rightAlign width-130">
+			1179601
+		</div><div title="فیزیولوژی خون(نظری) " class="cell span-3 rightAlign width-200">
+			فیزیولوژی خون(نظری) 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0/3" class="cell span-3 centerAlign width-80">
+			0/3
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="15" class="cell span-3 rightAlign width-100">
+			15
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowEven"><div title="13" class="cell span-1 centerAlign width-40">
+			13
+		</div><div title="11196" class="cell span-3 rightAlign width-130">
+			11196
+		</div><div title="فیزیولوژی سلول " class="cell span-3 rightAlign width-200">
+			فیزیولوژی سلول 
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0/8" class="cell span-3 centerAlign width-80">
+			0/8
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="16" class="cell span-3 rightAlign width-100">
+			16
+		</div><div title="قبول" class="cell span-3 rightAlign width-140">
+			قبول
+		</div></li><li class="gridRowOdd"><div title="14" class="cell span-1 centerAlign width-40">
+			14
+		</div><div title="1019602" class="cell span-3 rightAlign width-130">
+			1019602
+		</div><div title="مقدمات علوم تشریح(عملی)" class="cell span-3 rightAlign width-200">
+			مقدمات علوم تشریح(عملی)
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="0/3" class="cell span-3 centerAlign width-80">
+			0/3
+		</div><div title="8" class="cell span-3 rightAlign width-100">
+			8
+		</div><div title="مردود" class="cell span-3 rightAlign width-140">
+			مردود
+		</div></li><li class="gridRowEven"><div title="15" class="cell span-1 centerAlign width-40">
+			15
+		</div><div title="1019601" class="cell span-3 rightAlign width-130">
+			1019601
+		</div><div title="مقدمات علوم تشریح(نظری)" class="cell span-3 rightAlign width-200">
+			مقدمات علوم تشریح(نظری)
+		</div><div title="0" class="cell span-3 rightAlign width-70">
+			0
+		</div><div title="2/2" class="cell span-3 centerAlign width-80">
+			2/2
+		</div><div title="0" class="cell span-3 centerAlign width-80">
+			0
+		</div><div title="9.22" class="cell span-3 rightAlign width-100">
+			9.22
+		</div><div title="مردود" class="cell span-3 rightAlign width-140">
+			مردود
+		</div></li>
+	</ul><div class="summary">
+		<ul>
+			<li><span class="from"></span><span>تا</span><span class="to"></span><span>از</span><span class="total"></span><span>در</span><span class="pages"></span><span>صفحه</span><span></span><span class="selected"></span></li><li></li>
+		</ul>
+	</div>
+</div><script type="text/javascript" language="javascript">
+	$(function() {if(!grid['StudentLessonGrid']) {grid['StudentLessonGrid'] = liteGrid('StudentLessonGrid');window.paginatorCount = 10;Object.merge(grid['StudentLessonGrid'] , {"width":22,"allow_sort":false,"allow_paginate":true,"allow_search":false,"allow_edit":false,"allow_insert":false,"allow_select":false,"table_less":true,"batch":false,"fixed_height":true,"has_header":true,"page_size":100,"use_form":false,"selected":false,"allow_customization":false,"server":true,"culture":"invariant","empty_behavior":"Header","empty_message":"شما درسی در این نیمسال ندارید","requires_validation":false,"paginator_type":"pagenumbers","show_summary":true,"row_height":0,"command_icons":{"add" : "plus-sign","edit" : "edit","delete" : "trash","save" : "ok-circle","choose" : "hand-left","cancel" : "stop"},"protocol":"json","model_type":"StudentLesson"});grid['StudentLessonGrid'].args = {"termId":01a375cf-52c8-4518-928e-2c543ec1ca13,"studentUserId":aec99266-0263-411c-b363-85bda8a6c2b1};grid['StudentLessonGrid'].select='/Education/Workbooks/GetWorkbookStudentTermLessons?termId=01a375cf-52c8-4518-928e-2c543ec1ca13&studentUserId=aec99266-0263-411c-b363-85bda8a6c2b1';grid['StudentLessonGrid'].default_sort='TermLesson.Lesson.LessonName asc';grid['StudentLessonGrid'].Initialize();grid['StudentLessonGrid'].glossary = {"From":"از","To":"تا","Total":"کل","Pages":"صفحه","Selected":"انتخاب شده","Through":"در"};grid['StudentLessonGrid'].PrepareForm();if($('form:has(#StudentLessonGrid)').attr('elements')) $('form:has(#StudentLessonGrid)').attr('elements').sort.value = 'TermLesson.Lesson.LessonName asc';}});
+</script>
+</div>
+<br>
+<br>
+    <table class="table table-bordered">
+        <tbody>
+            <tr class="font-bold">
+                <td class="col-sm-2" colspan="4">
+                    نیمسال
+                </td>
+
+            </tr>
+            <tr>
+                <td class="col-sm-2">
+                    اخذ شده:
+                    <span id="TermSelectedUnits">18/40</span>
+
+                </td>
+                <td class="col-sm-2">
+                    گذرانده :
+                    <span id="TermPassedUnits">6/10</span>
+
+                </td>
+                <td class="col-sm-2">
+                    معدل :
+                    <span id="TermAverage">10/53</span>
+
+                </td>
+                <td class="col-sm-2">
+                    امتیاز :
+                    <span id="TermPoint">161/18</span>
+
+                </td>
+            </tr><tr>
+                <td class="col-sm-2">
+                    رتبه در ترم:
+                    39
+                </td>
+                <td class="col-sm-2">
+                    
+                </td>
+                <td class="col-sm-2">
+                    معدل :
+                    10.53
+                </td>
+                <td class="col-sm-2">
+                    واحد گذرانده کل:
+                    6.10
+                </td>
+            </tr>
+
+            
+    </tbody></table>
+
+
+
+                </div>
+                <div class="tab-pane" id="14022">
+                    
+<div id="gridID" class="litegrid-parent">
+    <div id="StudentLessonGrid" class="liteGrid grid-22 ">
+	<div class="gridHeaderRow">
+		<div class="cell span-## width-40" name="RowIndex" title="ردیف">
+			<div class="sortImage">
+
+			</div><span>ردیف</span>
+		</div><div class="cell span-## width-130" name="TermLesson.Lesson.LessonCode" title="کد درس">
+			<div class="sortImage">
+
+			</div><span>کد درس</span>
+		</div><div class="cell span-## sortedColumn asc width-200" name="TermLesson.Lesson.LessonName" title="نام درس">
+			<div class="sortImage">
+
+			</div><span>نام درس</span>
+		</div><div class="cell span-## width-70" name="TermLesson.LessonGroup" title="گروه درس">
+			<div class="sortImage">
+
+			</div><span>گروه درس</span>
+		</div><div class="cell span-## width-80" name="TermLesson.Lesson.TheoreticalUnit" title="واحد نظری">
+			<div class="sortImage">
+
+			</div><span>واحد نظری</span>
+		</div><div class="cell span-## width-80" name="TermLesson.Lesson.PracticalUnit" title="واحد عملی">
+			<div class="sortImage">
+
+			</div><span>واحد عملی</span>
+		</div><div class="cell span-## width-100" name="GradeStr" title="نمره">
+			<div class="sortImage">
+
+			</div><span>نمره</span>
+		</div><div class="cell span-## width-140" name="LessonGradeStatus.Title" title="عنوان">
+			<div class="sortImage">
+
+			</div><span>عنوان</span>
+		</div>
+	</div><ul class="gridRows">
+
+	</ul><div class="summary">
+		<ul>
+			<li><span class="from"></span><span>تا</span><span class="to"></span><span>از</span><span class="total"></span><span>در</span><span class="pages"></span><span>صفحه</span><span></span><span class="selected"></span></li><li></li>
+		</ul>
+	</div>
+</div><script type="text/javascript" language="javascript">
+	$(function() {if(!grid['StudentLessonGrid']) {grid['StudentLessonGrid'] = liteGrid('StudentLessonGrid');window.paginatorCount = 10;Object.merge(grid['StudentLessonGrid'] , {"width":22,"allow_sort":false,"allow_paginate":true,"allow_search":false,"allow_edit":false,"allow_insert":false,"allow_select":false,"table_less":true,"batch":false,"fixed_height":true,"has_header":true,"page_size":100,"use_form":false,"selected":false,"allow_customization":false,"server":true,"culture":"invariant","empty_behavior":"Header","empty_message":"شما درسی در این نیمسال ندارید","requires_validation":false,"paginator_type":"pagenumbers","show_summary":true,"row_height":0,"command_icons":{"add" : "plus-sign","edit" : "edit","delete" : "trash","save" : "ok-circle","choose" : "hand-left","cancel" : "stop"},"protocol":"json","model_type":"StudentLesson"});grid['StudentLessonGrid'].args = {"termId":f72f4fea-5499-47e8-a396-05e81c9e6598,"studentUserId":aec99266-0263-411c-b363-85bda8a6c2b1};grid['StudentLessonGrid'].select='/Education/Workbooks/GetWorkbookStudentTermLessons?termId=f72f4fea-5499-47e8-a396-05e81c9e6598&studentUserId=aec99266-0263-411c-b363-85bda8a6c2b1';grid['StudentLessonGrid'].default_sort='TermLesson.Lesson.LessonName asc';grid['StudentLessonGrid'].Initialize();grid['StudentLessonGrid'].glossary = {"From":"از","To":"تا","Total":"کل","Pages":"صفحه","Selected":"انتخاب شده","Through":"در"};grid['StudentLessonGrid'].PrepareForm();if($('form:has(#StudentLessonGrid)').attr('elements')) $('form:has(#StudentLessonGrid)').attr('elements').sort.value = 'TermLesson.Lesson.LessonName asc';}});
+</script>
+</div>
+<br>
+<br>
+    <table class="table table-bordered">
+        <tbody>
+            <tr class="font-bold">
+                <td class="col-sm-2" colspan="4">
+                    نیمسال
+                </td>
+
+            </tr>
+            <tr>
+                <td class="col-sm-2">
+                    اخذ شده:
+                    <span id="TermSelectedUnits">0/00</span>
+
+                </td>
+                <td class="col-sm-2">
+                    گذرانده :
+                    <span id="TermPassedUnits">0/00</span>
+
+                </td>
+                <td class="col-sm-2">
+                    معدل :
+                    <span id="TermAverage"></span>
+
+                </td>
+                <td class="col-sm-2">
+                    امتیاز :
+                    <span id="TermPoint">0/00</span>
+
+                </td>
+            </tr><tr>
+                <td class="col-sm-2">
+                    رتبه در ترم:
+                    
+                </td>
+                <td class="col-sm-2">
+                    
+                </td>
+                <td class="col-sm-2">
+                    معدل :
+                    10.53
+                </td>
+                <td class="col-sm-2">
+                    واحد گذرانده کل:
+                    6.10
+                </td>
+            </tr>
+
+            
+    </tbody></table>
+
+
+
+                </div>
+        </div>
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+
+</div>
+
+        <div class="alarm-box">
+            <div class="alarm-box-row">
+                <div class="alarm-value">
+                    <p></p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div id="common-dialog" class="modal fade k-rtl common-dialog" role="dialog" title="dialog Window">
+        <div class="modal-dialog">
+            <div id="common-dialog-content" class="modal-content">
+            </div>
+        </div>
+    </div>
+    <div id="common-dialog2" class="modal fade k-rtl common-dialog" role="dialog" title="dialog Window">
+        <div class="modal-dialog">
+            <div id="common-dialog-content" class="modal-content">
+            </div>
+        </div>
+    </div>
+    <script src="./کارنامه_files/education-footer-all-0.0.3.js.download"></script>
+
+    
+ 
+
+
+
+
+
+<script type="text/javascript">
+ //Antiforgery token generator
+
+    function GetToken() {
+        var token = '<input name="__RequestVerificationToken" type="hidden" value="liJRqXhJQdugUjsilfoHm1FxNYv7vmi14wBjm2VpShTTM81LQzSQGN2Ojltm0ocby8wGtl0V96h-yN8HoMApBd7gvBBA-lFvYORQHCo5VpouUNBngMQi1ched9-yegeX0" />';
+        token = $(token).val();
+        return token;
+    }
+
+</script>
+<script type="text/javascript">
+	var refresh = false;
+	window.onbeforeunload = function (event) {
+
+		if(window.event) {
+			if (window.event.clientX < 40 && window.event.clientY < 0) {
+				//alert("back button is clicked");
+			}
+			else{
+				//alert("refresh button is clicked");
+				refresh = true;
+			}
+		}
+		else{
+			if (event.currentTarget.performance.navigation.type == 2) {
+				//alert("back button is clicked");
+			}
+			if (event.currentTarget.performance.navigation.type == 1) {
+				//alert("refresh button is clicked");
+				refresh = true;
+		 }
+		}
+
+	if (refresh == false) { // If F5 is not pressed
+		$.ajax({
+			    url:'/CAS/Account/Logout',
+				contentType: "application/json; charset=utf-8",
+				type: "POST",
+				success: function (data) {
+				    console.log(data);
+				},
+				error: function (x, y, z) {
+				     console.log(x.responseText + "  " + x.status);
+				}
+		 });
+	}
+	};
+
+	$(window).keydown(function(event) {
+		if (event.keyCode == 116) { // User presses F5 to refresh
+		   refresh = true;
+		 }
+	});
+</script></body></html>
